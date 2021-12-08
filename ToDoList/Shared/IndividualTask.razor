@@ -1,0 +1,55 @@
+﻿@if (TaskToDo != null && !IsTable && !ShowOnlyTask)
+{
+    <div class="row">
+        <div class="col">
+            <p>@TaskToDo.Task</p>
+            <p>@TaskToDo.AddedTime</p>
+            <p>@TaskToDo.FinishAt</p>
+        </div>
+    </div>
+}
+@if (IsTable && !ShowOnlyTask)
+{
+    <tr>
+        <td>@AmountOfElements</td>
+        <td>@TaskToDo.Task</td>
+        <td>@TaskToDo.AddedTime</td>
+        <td>@TaskToDo.FinishAt.ToShortDateString()</td>
+        <td><button class="btn btn-danger" @onclick="(() => DeleteTask.InvokeAsync(TaskToDo))">Delete</button></td>
+    </tr>
+}
+
+@if (TaskToDo != null && ShowOnlyTask && !IsTable)
+{
+    <div class="row mb-4">
+        <div class="col pt-2">
+            <li>
+                @TaskToDo.Task
+            </li>
+        </div>
+
+        <div class="col text-left">
+            <button class="btn btn-danger" @onclick="(() => DeleteTask.InvokeAsync(TaskToDo))">Delete</button>
+        </div>
+
+        <div class="col"></div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public TaskToDo TaskToDo { get; set; }
+
+    [Parameter]
+    public bool IsTable { get; set; } = true;
+
+    [Parameter]
+    public int AmountOfElements { get; set; }
+
+    [Parameter]
+    public bool ShowOnlyTask { get; set; }
+
+    [Parameter]
+    public EventCallback<TaskToDo> DeleteTask { get; set; }
+
+}

@@ -1,0 +1,46 @@
+﻿@if (CreateTable)
+{
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead class="thead-light">
+                <tr>
+                    <th>№</th>
+                    <th>Task</th>
+                    <th>Added At</th>
+                    <th>Finish At</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <GenericList ListOfItems="Tasks">
+                    <NumberOfElementTemplate Context="elementNumber">
+                        <IndividualTask TaskToDo="Tasks[elementNumber]" IsTable="true" DeleteTask="DeleteTheTask"
+                                    AmountOfElements="elementNumber + 1" />
+                    </NumberOfElementTemplate>
+                </GenericList>
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <GenericList ListOfItems="Tasks" IsOneElem="true">
+        <ItemSingleTemplate Context="task">
+            <IndividualTask TaskToDo="task"
+                        IsTable="false" ShowOnlyTask="true" DeleteTask="DeleteTheTask" />
+        </ItemSingleTemplate>
+    </GenericList>
+}
+
+@code {
+    [Parameter]
+    public List<TaskToDo> Tasks { get; set; }
+
+    [Parameter]
+    public bool CreateTable { get; set; }
+
+    void DeleteTheTask(TaskToDo taskToDelete)
+    {
+        Tasks.Remove(taskToDelete);
+    }
+}

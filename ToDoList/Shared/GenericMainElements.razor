@@ -1,0 +1,101 @@
+﻿
+<div class="pb-3">
+    <div class="col alert alert-secondary text-center">
+        <h1>Todo List</h1>
+    </div>
+</div>
+
+<div class="pb-4 row">
+    <div name="Field to insert" class="col text-left">
+        <input type="search" class="form-control-lg text-center" placeholder="Input your task" @bind="taskToDo" @onkeypress="AddTask" />
+    </div>
+
+    <div name="button" class="col text-left pt-2">
+        <button class="btn btn-primary " @onclick="AddTask">Add</button>
+    </div>
+
+    <div class="col text-left pt-2">
+        <div class="dropdown">
+            <button @onclick="ShowMenu" class="dropbtn">Dropdown</button>
+            @if (showMenu)
+            {
+                <div id="myDropdown" class="dropdown-content">
+                    <a href="/TableList">Table List</a>
+                    <a href="/SingleList">Single List</a>
+                    <a href="/">Main</a>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<div></div>
+
+@*<div class="dropdown">
+  <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" @onclick="ShowMenu">
+    Dropdown button
+  </button>
+    @if (showMenu)
+    {
+        <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="#">Link 1</a></li>
+            <li><a class="dropdown-item" href="#">Link 2</a></li>
+            <li><a class="dropdown-item" href="#">Link 3</a></li>
+        </ul>
+    }
+</div>*@
+
+
+@if (IsSingleElemToShow)
+{
+    <TasksListTable Tasks="Tasks" CreateTable="false" />
+}
+else
+{
+    <div class="row mb-5">
+        <div class="col">
+            <input type="number" class="form-control-lg text-center" placeholder="Days to done the task" @bind="daysToDone" />
+        </div>
+    </div>
+
+    <TasksListTable Tasks="Tasks" CreateTable="true" />
+}
+
+@code {
+    [Parameter]
+    public bool IsSingleElemToShow { get; set; }
+
+    string taskToDo;
+    uint daysToDone;
+    bool showMenu = false;
+
+    List<TaskToDo> Tasks;
+
+    public void AddTask()
+    {
+        if (taskToDo != null)
+        {
+            Tasks.Add(new TaskToDo
+                {
+                    Task = taskToDo,
+                    AddedTime = DateTime.Now,
+                    FinishAt = DateTime.Now.AddDays(daysToDone)
+                });
+
+            taskToDo = null;
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Tasks = new List<TaskToDo>();
+        AddTask();
+    }
+
+    public void ShowMenu()
+    {
+        showMenu = (!showMenu) ? true : false;
+    }
+
+
+}

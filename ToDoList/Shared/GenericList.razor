@@ -1,0 +1,69 @@
+﻿@*Для того чтобы использовать дженерики (этот тип всегда начинается с Т)*@
+@typeparam TItem
+
+
+@if (ListOfItems == null)
+{
+    @if (NullList != null)
+    {
+        @NullList
+    }
+    else
+    {
+        <img src="https://flevix.com/wp-content/uploads/2019/07/Color-Loading-1.gif" height="200" />
+    }
+}
+@*В случае, если в массиве ноль элементов*@
+else if (ListOfItems.Count == 0)
+{
+    @if (NullList != null)
+    {
+        @EmptyList
+    }
+    else
+    {
+        <img src="https://flevix.com/wp-content/uploads/2019/07/Color-Loading-1.gif" height="200" />
+    }
+
+}
+else if (!IsOneElem)
+{
+    //Для вывода элемента в таблицу с его номером
+    @for (int ElementNumber = 0; ElementNumber < ListOfItems.Count; ElementNumber++)
+    {
+        @NumberOfElementTemplate(ElementNumber)
+    }
+}
+else
+{
+    //Для вывода элемента без таблицы и без номера
+    @foreach (var item in ListOfItems)
+    {
+        @ItemSingleTemplate(item)
+    }
+}
+
+
+@code {
+    [Parameter]
+    public RenderFragment NullList { get; set; }
+
+    [Parameter]
+    public RenderFragment EmptyList { get; set; }
+
+    // Если нужно срендерить именно сам элемент массива, то надо написать <TItem> и перебрать в foreach
+    [Parameter]
+    public RenderFragment<int> NumberOfElementTemplate { get; set; }
+
+    [Parameter]
+    public RenderFragment<TItem> ItemSingleTemplate{ get; set; }
+
+    [Parameter]
+    public List<TItem> ListOfItems { get; set; }
+
+    [Parameter]
+    public TItem Item { get; set; }
+
+    [Parameter]
+    public bool IsOneElem { get; set; }
+}
